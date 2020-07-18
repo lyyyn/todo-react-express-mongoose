@@ -7,7 +7,15 @@ class App extends React.Component {
         }
 
     }
-
+    componentDidMount() {
+        fetch('/todos')
+            .then(response => response.json())
+            .then(todos => {
+                this.setState({
+                    todos : todos
+                })
+            })
+    }
     handleChange = (event) => {
         this.setState({ [event.target.id]: event.target.value })
     }
@@ -47,6 +55,19 @@ class App extends React.Component {
                     <input type='submit' />
                 </form>
                 <h2>{this.state.description}</h2>
+                <table>
+                    <tbody>
+                        {this.state.todos.map(todo => {
+                            return (
+                                <tr>
+                                    <td> {todo.description} </td>
+                                    <td> X </td>
+                                    <td> complete </td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
             </div>
         )
     }
