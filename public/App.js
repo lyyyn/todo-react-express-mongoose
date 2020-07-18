@@ -21,6 +21,24 @@ class App extends React.Component {
                 })
             })
     }
+    updateToDo = (todo, index) => {
+        todo.complete = !todo.complete
+        fetch('todos/' + todo._id, {
+            body: JSON.stringify(todo),
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(updatedToDo => updatedToDo.json())
+            .then(jsonedToDo => {
+                fetch('/todos')
+                    .then(response => response.json())
+                    .then(todos => {
+                        this.setState({ todos: todos })
+                    })
+            })
+    }
     componentDidMount() {
         fetch('/todos')
             .then(response => response.json())
@@ -73,10 +91,10 @@ class App extends React.Component {
                     <tbody>
                         {this.state.todos.map((todo, index) => {
                             return (
-                                <tr>
-                                    <td> {todo.description} </td>
+                                <tr >
+                                    <td className={todo.complete ? 'complete' : ''}> {todo.description} </td>
                                     <td onClick={() => this.deleteToDo(todo._id, index)}> X </td>
-                                    <td> complete </td>
+                                    <td onClick={() => this.updateToDo(todo, index)} > complete </td>
                                 </tr>
                             )
                         })}
