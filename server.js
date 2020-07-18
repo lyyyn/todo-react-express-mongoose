@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const app = express();
 
 app.use(express.json());
+app.use(express.static('public'));
 
 // Environment Variables (getting ready for Heroku)
 const PORT = process.env.PORT || 3000;
