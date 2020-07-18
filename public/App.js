@@ -7,12 +7,26 @@ class App extends React.Component {
         }
 
     }
+    deleteToDo = (id, index) => {
+        fetch('todos/' + id,
+            {
+                method: 'DELETE'
+            })
+            .then(data => {
+                this.setState({
+                    todos: [
+                        ...this.state.todos.slice(0, index),
+                        ...this.state.todos.slice(index + 1)
+                    ]
+                })
+            })
+    }
     componentDidMount() {
         fetch('/todos')
             .then(response => response.json())
             .then(todos => {
                 this.setState({
-                    todos : todos
+                    todos: todos
                 })
             })
     }
@@ -57,11 +71,11 @@ class App extends React.Component {
                 <h2>{this.state.description}</h2>
                 <table>
                     <tbody>
-                        {this.state.todos.map(todo => {
+                        {this.state.todos.map((todo, index) => {
                             return (
                                 <tr>
                                     <td> {todo.description} </td>
-                                    <td> X </td>
+                                    <td onClick={() => this.deleteToDo(todo._id, index)}> X </td>
                                     <td> complete </td>
                                 </tr>
                             )
